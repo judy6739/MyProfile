@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء السيرة الذاتية</title>
+
+    <!-- إضافة مكتبة FileSaver.js لتنزيل الملفات -->
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+    <!-- إضافة مكتبة docx.js -->
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.0.0/build/index.min.js"></script>
+
+</head>
+<body style="font-family: Arial, sans-serif; direction: rtl; text-align: right;">
+    <div style="width: 80%; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+        <h1 style="text-align: center; color: #2d87f0;">إنشاء السيرة الذاتية</h1>
+        
+        <label for="cvName">الاسم:</label>
+        <input type="text" id="cvName" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px;"><br>
+
+        <label for="cvJob">الوظيفة:</label>
+        <input type="text" id="cvJob" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px;"><br>
+
+        <label for="cvEducation">التعليم:</label>
+        <input type="text" id="cvEducation" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px;"><br>
+
+        <label for="cvExperience">الخبرات:</label>
+        <input type="text" id="cvExperience" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px;"><br>
+
+        <button onclick="generateCV()" style="background-color: #2d87f0; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            إنشاء السيرة الذاتية
+        </button>
+    </div>
+
+    <script>
+        function generateCV() {
+            const { Document, Packer, Paragraph, TextRun } = window.docx;
+
+            const name = document.getElementById('cvName').value;
+            const job = document.getElementById('cvJob').value;
+            const education = document.getElementById('cvEducation').value;
+            const experience = document.getElementById('cvExperience').value;
+
+            if (!name || !job || !education || !experience) {
+                alert('من فضلك أدخل جميع المعلومات');
+                return;
+            }
+
+            const doc = new Document({
+                sections: [
+                    {
+                        properties: {},
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "السيرة الذاتية",
+                                        bold: true,
+                                        size: 24,
+                                        color: "#0000FF",  // استبدال اللون
+                                        underline: true,
+                                    }),
+                                ],
+                                alignment: "center",
+                                spacing: { after: 400 },
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: `الاسم: ${name}`,
+                                        bold: true,
+                                        size: 18,
+                                    }),
+                                ],
+                                spacing: { after: 200 },
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: `الوظيفة: ${job}`,
+                                        size: 18,
+                                    }),
+                                ],
+                                spacing: { after: 200 },
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: `التعليم: ${education}`,
+                                        size: 18,
+                                    }),
+                                ],
+                                spacing: { after: 200 },
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: `الخبرات: ${experience}`,
+                                        size: 18,
+                                    }),
+                                ],
+                                spacing: { after: 200 },
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "شكراً لاهتمامك.",
+                                        bold: true,
+                                        size: 20,
+                                        color: "#008000",  // استبدال اللون
+                                    }),
+                                ],
+                                alignment: "center",
+                                spacing: { after: 400 },
+                            }),
+                        ],
+                    },
+                ],
+            });
+
+            Packer.toBlob(doc).then((blob) => {
+                saveAs(blob, "cv.docx");
+            }).catch((error) => {
+                alert("حدث خطأ أثناء إنشاء السيرة الذاتية: " + error);
+            });
+        }
+    </script>
+</body>
+</html>
